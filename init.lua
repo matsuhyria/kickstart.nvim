@@ -203,6 +203,16 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
+-- Make sure neovim respects 2-space indent
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'javascript',
+  callback = function()
+    vim.opt_local.tabstop = 2
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.softtabstop = 2
+    vim.opt_local.expandtab = true
+  end,
+})
 
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
@@ -240,7 +250,8 @@ vim.opt.rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
+  --
+  -- 'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -680,7 +691,7 @@ require('lazy').setup({
         --    https://github.com/pmizio/typescript-tools.nvim
         --
         -- But for many setups, the LSP (`ts_ls`) will work just fine
-        -- ts_ls = {},
+        ts_ls = {},
         --
 
         lua_ls = {
@@ -755,7 +766,7 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
+        local disable_filetypes = { c = true, cpp = true, js = true }
         if disable_filetypes[vim.bo[bufnr].filetype] then
           return nil
         else
